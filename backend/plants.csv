@@ -1,0 +1,31 @@
+name,soil,sun,goal,season,difficulty,companion,description
+Tomato,silty,full,food,Spring,Medium,Basil,Productive in fertile soil with long sunny days. Needs support as it grows tall.
+Zucchini,silty,full,food,Spring,Easy,Nasturtium,Fast growing and very productive. One plant can feed a family.
+Carrot,sandy,full,food,Spring,Easy,Onion,Sandy loose soil lets roots grow straight and deep without deforming.
+Potato,clay,partial,food,Spring,Easy,Horseradish,Tolerates heavy clay soil well. Very productive and easy to store.
+Lettuce,silty,partial,food,Spring,Easy,Radish,Grows fast in rich soil. Ideal for beginners and small spaces.
+Garlic,sandy,full,food,Autumn,Easy,Chamomile,Plant in autumn for summer harvest. Repels many pests naturally.
+Bean,unknown,full,food,Spring,Easy,Carrot,Fixes nitrogen in the soil improving fertility for nearby plants.
+Pea,unknown,partial,food,Spring,Easy,Mint,Climbs naturally and fixes nitrogen. Great for cool early spring.
+Spinach,clay,partial,food,Spring,Easy,Strawberry,Thrives in moist clay soil. Very nutritious and fast to harvest.
+Kale,clay,partial,food,Autumn,Easy,Dill,Extremely hardy. Survives frost and produces through winter.
+Lavender,sandy,full,pollinators,Spring,Easy,Rosemary,Attracts bees and butterflies. Thrives in dry sandy conditions.
+Borage,silty,full,pollinators,Spring,Easy,Tomato,Star-shaped blue flowers loved by bees. Also repels tomato hornworm.
+Phacelia,unknown,full,pollinators,Spring,Easy,Any,One of the best bee plants. Fast growing and very productive flowers.
+Sunflower,clay,full,pollinators,Spring,Easy,Cucumber,Tall and dramatic. Bees love the large flower heads.
+Yarrow,unknown,full,pollinators,Summer,Easy,Chamomile,Attracts predatory insects that eat garden pests. Extremely hardy.
+Comfrey,clay,partial,biodiversity,Spring,Easy,Nettle,Deep roots mine nutrients from subsoil. Leaves make excellent mulch.
+Elderflower,silty,partial,biodiversity,Spring,Easy,Blackberry,Berries and flowers feed birds and insects. Very low maintenance.
+Nettle,unknown,partial,biodiversity,Spring,Easy,Comfrey,Host plant for many butterfly species. Edible and medicinal.
+Wildflower mix,unknown,full,biodiversity,Spring,Easy,Any,Mix of native species to support local insect populations.
+Hawthorn,clay,full,biodiversity,Autumn,Medium,Blackthorn,Berries feed birds through winter. Dense thorny hedge for wildlife.
+Oak tree,clay,full,shade,Autumn,Hard,Ivy,Supports hundreds of insect species. Very long lived and majestic.
+Willow,silty,partial,shade,Autumn,Easy,Alder,Fast growing shade tree. Loves moist silty soil near water sources.
+Linden,unknown,full,shade,Autumn,Medium,Chamomile,Fragrant flowers attract bees. Excellent shade tree for communities.
+Alder,silty,partial,shade,Autumn,Medium,Willow,Fixes nitrogen and provides shade. Ideal near streams or wet areas.
+Hazel,clay,partial,shade,Autumn,Easy,Bluebell,Produces edible nuts and creates dappled shade. Great for communities.
+Rosemary,sandy,full,food,Spring,Easy,Lavender,Drought tolerant aromatic herb. Adapts to most soils with good drainage.
+Mint,unknown,partial,food,Spring,Easy,Chamomile,Grows vigorously in moist soil. Plant in containers to control spread.
+Thyme,sandy,full,food,Spring,Easy,Sage,Hardy aromatic herb for dry sandy soil. Very low maintenance.
+Chamomile,unknown,full,pollinators,Spring,Easy,Any,Calming herb and excellent companion plant. Attracts beneficial insects.
+Blackcurrant,silty,partial,food,Autumn,Easy,Garlic,Productive berry bush for fertile soil. Rich in vitamin C.
