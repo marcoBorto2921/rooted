@@ -1,9 +1,10 @@
 /**
  * POST /api/recommend
  *
- * Receives the user's form answers and climate data,
- * builds a prompt, and calls Groq to generate personalized
- * plant recommendations. Returns a structured JSON response.
+ * Receives the user's form answers and climate data.
+ * 1. Calls the Python backend to get matching plants from the database
+ * 2. Passes those plants to Groq to generate natural language explanations
+ * 3. Returns the final recommendations to the frontend
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -11,42 +12,62 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   const { answers, climate } = await req.json();
 
-  // Extract useful climate info from Open-Meteo response
+  // Extract climate info from Open-Meteo response
   const temps = climate.daily.temperature_2m_max;
   const minTemps = climate.daily.temperature_2m_min;
   const maxTemp = Math.max(...temps).toFixed(1);
   const minTemp = Math.min(...minTemps).toFixed(1);
 
-  // Build the prompt with all the context
+  // Step 1 — get matching plants from the Python backend
+  const dbResponse = await fetch("http://localhost:8000/recommend", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      soil: answers.soil,
+      sun: answers.sun,
+      goal: answers.goal,
+      max_temp: parseFloat(maxTemp),
+      min_temp: parseFloat(minTemp),
+    }),
+  });
+
+  const dbData = await dbResponse.json();
+  const plants = dbData.plants;
+
+  if (!plants || plants.length === 0) {
+    return NextResponse.json({ recommendations: [] });
+  }
+
+  // Step 2 — ask Groq to explain why each plant suits this land
   const prompt = `
-You are an expert botanist helping community gardens choose the right plants.
+You are an expert botanist helping community gardens.
 
-The user has provided the following information about their land:
-- Soil type: ${answers.soil}
-- Sun exposure: ${answers.sun}
-- Space size: ${answers.size}
-- Main goal: ${answers.goal}
-
-Local climate data (next 16 days):
+The user's land:
+- Soil: ${answers.soil}
+- Sun: ${answers.sun}
+- Size: ${answers.size}
+- Goal: ${answers.goal}
 - Max temperature: ${maxTemp}°C
 - Min temperature: ${minTemp}°C
 
-Based on this information, recommend 4 plants that would thrive in these conditions.
+These plants have been selected from our database as suitable matches:
+${plants.map((p: any) => `- ${p.name}: ${p.description}`).join("\n")}
 
-Respond ONLY with a valid JSON array, no extra text, no markdown, no backticks. Use this exact format:
+For each plant, write a short personalized explanation of why it suits THIS specific land.
+
+Respond ONLY with a valid JSON array, no extra text, no markdown, no backticks:
 [
   {
     "name": "Plant name",
-    "why": "One sentence explaining why it suits this land",
+    "why": "One sentence explaining why it suits this specific land",
     "season": "Best time to plant",
     "difficulty": "Easy / Medium / Hard",
-    "companion": "One plant that grows well alongside it"
+    "companion": "Companion plant name"
   }
 ]
   `;
 
-  // Call Groq API
-  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  const groqResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -59,10 +80,8 @@ Respond ONLY with a valid JSON array, no extra text, no markdown, no backticks. 
     }),
   });
 
-  const data = await response.json();
-  const text = data.choices[0].message.content;
-
-  // Parse the JSON response from the model
+  const groqData = await groqResponse.json();
+  const text = groqData.choices[0].message.content;
   const recommendations = JSON.parse(text);
 
   return NextResponse.json({ recommendations });
