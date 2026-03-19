@@ -53,6 +53,9 @@ const steps = [
 ];
 
 export default function Home() {
+  const [climateData, setClimateData] = useState<any>(null);
+  const [location, setLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
@@ -63,10 +66,35 @@ export default function Home() {
     setAnswers({ ...answers, [step.id]: value });
   }
 
-  // Move to the next step
-  function goNext() {
+  // Move to the next step, or fetch climate data and submit on the last step
+  async function goNext() {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
+    } else {
+      setIsLoading(true);
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ lat: latitude, lon: longitude });
+
+          // Fetch climate data from Open-Meteo (free, no API key needed)
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto&forecast_days=16`;
+
+          const response = await fetch(url);
+          const climate = await response.json();
+
+          setClimateData(climate);
+          setIsLoading(false);
+
+          console.log("Ready to submit:", { answers, location: { lat: latitude, lon: longitude }, climate });
+        },
+        (error) => {
+          console.error("Location error:", error);
+          setIsLoading(false);
+          alert("Could not get your location. Please allow location access.");
+        }
+      );
     }
   }
 
@@ -135,10 +163,10 @@ export default function Home() {
           </button>
           <button
             onClick={goNext}
-            disabled={!selected}
+            disabled={!selected || isLoading}
             className="px-5 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 disabled:opacity-40 transition-all"
           >
-            {currentStep === steps.length - 1 ? "Get recommendations" : "Next"}
+            {isLoading ? "Getting your location..." : currentStep === steps.length - 1 ? "Get recommendations" : "Next"}
           </button>
         </div>
 
